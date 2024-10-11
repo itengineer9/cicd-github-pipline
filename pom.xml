@@ -25,8 +25,8 @@
 		  <anypoint.password>${anypoint.password}</anypoint.password>   -->
 		  
 		   <!-- Reference environment variables for Anypoint credentials -->
-		  <anypoint.username>${env.ANYPOINT_USERNAME}</anypoint.username>
-		  <anypoint.password>${env.ANYPOINT_PASSWORD}</anypoint.password>
+		  <anypoint.username>${env.ANYPOINT_PLATFORM_USERNAME}</anypoint.username>
+		  <anypoint.password>${env.ANYPOINT_PLATFORM_PASSWORD}</anypoint.password>
 		
 		  <!-- Application Deployment Configuration -->
 		  <cloudhub.region>us-east-1</cloudhub.region>
