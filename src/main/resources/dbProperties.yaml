@@ -1,0 +1,6 @@
+db:
+  host: 'localhost'
+  port: '3306'
+  username: 'aalhamad'
+  password: 'Rtz6gh7j8k'
+  database: 'test_schema'
