@@ -60,6 +60,6 @@ jobs:
         PASSWORD: ${{ secrets.anypoint_platform_password }}
       run: |
         artifactName=$(ls *.jar | head -1)
-        mvn deploy -DmuleDeploy \
+        mvn deploy -DmuleDeploy --settings settings.xml \
          -Dmule.artifact=$artifactName 
         
