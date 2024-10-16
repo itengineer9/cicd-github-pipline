@@ -2,9 +2,9 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 
-	<groupId>com.mycompany</groupId>
+	<groupId>5c27293f-a15e-4c80-a3b7-c94112623358</groupId>
 	<artifactId>cicd-github-pipline</artifactId>
-	<version>1.0.0-SNAPSHOT</version>
+	<version>1.0.0</version>
 	<packaging>mule-application</packaging>
 
 	<name>cicd-github-pipline</name>
@@ -17,16 +17,20 @@
 		<mule.maven.plugin.version>4.2.0</mule.maven.plugin.version>
 		<mule.application.name>cicd-github-pipline</mule.application.name>
 
-		<!-- CloudHub-specific configuration
-		  <anypoint.username>${anypoint.username}</anypoint.username>
-		  <anypoint.password>${anypoint.password}</anypoint.password>   -->
-		<!-- Reference environment variables for Anypoint credentials -->
-		<anypoint.username>${env.ANYPOINT_PLATFORM_USERNAME}</anypoint.username>
-		<anypoint.password>${env.ANYPOINT_PLATFORM_PASSWORD}</anypoint.password>
+		<!-- CloudHub-specific configuration -->
+		<anypoint.username>arbeitgml</anypoint.username>
+		<anypoint.password>Rtz6gh7j8k9@</anypoint.password>
+
+		<!-- CloudHub-specific configuration <anypoint.username>${anypoint.username}</anypoint.username> 
+			<anypoint.password>${anypoint.password}</anypoint.password> -->
+
+		<!-- Reference environment variables for Anypoint credentials <anypoint.username>${env.ANYPOINT_PLATFORM_USERNAME}</anypoint.username> 
+			<anypoint.password>${env.ANYPOINT_PLATFORM_PASSWORD}</anypoint.password> -->
+
 		<!-- Application Deployment Configuration -->
-		<cloudhub.region>us-east-1</cloudhub.region>
-		<cloudhub.workers>1</cloudhub.workers>
-		<cloudhub.worker.type>Micro</cloudhub.worker.type>
+		<targetName>Cloudhub-US-East-1</targetName>
+		<workers>1</workers>
+		<worker.type>Micro</worker.type>
 		<cloudhub.env>Sandbox</cloudhub.env>
 	</properties>
 
@@ -50,16 +54,29 @@
 						</sharedLibrary>
 					</sharedLibraries>
 
-					<cloudHubDeployment>
+					<cloudhub2Deployment>
+						<uri>https://anypoint.mulesoft.com</uri>
+						<provider>MC</provider>
+						<target>${targetName}</target>
+						<muleVersion>${app.runtime}</muleVersion>
 						<username>${anypoint.username}</username>
 						<password>${anypoint.password}</password>
 						<applicationName>${mule.application.name}</applicationName>
-						<region>${cloudhub.region}</region>
 						<environment>${cloudhub.env}</environment>
-						<workers>${cloudhub.workers}</workers>
-						<workerType>${cloudhub.worker.type}</workerType>
-					</cloudHubDeployment>
+						<replicas>1</replicas>
+						<vCores>1</vCores>
+						<deploymentSettings>
+							<http>
+								<inbound>
+									<publicUrl>${publicURL}</publicUrl>
+									<forwardSslSession>true</forwardSslSession>
+									<lastMileSecurity>true</lastMileSecurity>
+								</inbound>
+							</http>
+						</deploymentSettings>
+					</cloudhub2Deployment>
 
+					<classifier>---- select project type ----</classifier>
 				</configuration>
 			</plugin>
 		</plugins>
@@ -104,6 +121,10 @@
 			<url>https://repository.mulesoft.org/releases/</url>
 			<layout>default</layout>
 		</repository>
+		<repository>
+			<id>mulesoft-snapshots</id>
+			<url>https://repository.mulesoft.org/snapshots/</url>
+		</repository>
 	</repositories>
 
 	<pluginRepositories>
@@ -116,6 +137,19 @@
 				<enabled>false</enabled>
 			</snapshots>
 		</pluginRepository>
+		<pluginRepository>
+			<id>mule-public</id>
+			<url>https://repository.mulesoft.org/nexus/content/repositories/releases</url>
+		</pluginRepository>
 	</pluginRepositories>
+
+	<distributionManagement>
+		<repository>
+			<id>Repository</id>
+			<name>Corporate Repository</name>
+			<url>https://maven.anypoint.mulesoft.com/api/v3/organizations/5c27293f-a15e-4c80-a3b7-c94112623358/maven</url>
+			<layout>default</layout>
+		</repository>
+	</distributionManagement>
 
 </project>
