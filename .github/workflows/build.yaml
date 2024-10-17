@@ -63,7 +63,7 @@ jobs:
    # Display the contents of the settings.xml (masking sensitive info)
     - name: Display settings.xml
       run: |
-        cat ~/.m2/settings.xml | sed 's/${{ secrets.ANYPOINT_CLIENT_ID }}/[CLIENT_ID]/g' | sed 's/${{ secrets.ANYPOINT_CLIENT_SECRET }}/[CLIENT_SECRET]/g'
+        cat ~/.m2/settings.xml # | sed 's/${{ secrets.ANYPOINT_CLIENT_ID }}/[CLIENT_ID]/g' | sed 's/${{ secrets.ANYPOINT_CLIENT_SECRET }}/[CLIENT_SECRET]/g'
    
     - name: Deploy to Sandbox
       run: |
