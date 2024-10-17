@@ -19,6 +19,14 @@ jobs:
         key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
         restore-keys: |
           ${{ runner.os }}-maven-
+    
+    # Create Maven settings.xml following MuleSoft documentation format
+    - name: Set up settings.xml
+      run: |
+        mkdir -p ~/.m2
+        echo "<settings><servers><server><id>my.anypoint.credentials</id><username>~~~Client~~~</username><password>${{ secrets.ANYPOINT_CLIENT_ID }}~?~${{ secrets.ANYPOINT_CLIENT_SECRET }}</password></server></servers></settings>" > ~/.m2/settings.xml
+
+    # Set up Java and Mavenqq
     - name: Set up JDK 1.8
       uses: actions/setup-java@v3
       with:
@@ -55,13 +63,7 @@ jobs:
       with:
         name: artifacts
     - name: Deploy to Sandbox
-      env:
-        USERNAME: ${{ secrets.anypoint_platform_username }}
-        PASSWORD: ${{ secrets.anypoint_platform_password }}
       run: |
         artifactName=$(ls *.jar | head -1)
-        mvn deploy -DmuleDeploy --settings settings.xml \
-         -Dmule.artifact=$artifactName \
-         -Danypoint.username="$USERNAME" \
-         -Danypoint.password="$PASSWORD"
-        
+        mvn deploy -DmuleDeploy \
+         -Dmule.artifact=$artifactName --settings ~/.m2/settings.xml
