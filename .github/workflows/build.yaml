@@ -23,7 +23,6 @@ jobs:
     # Create Maven settings.xml following MuleSoft documentation format
     - name: Set up settings.xml        
       run: |
-        with: ~/.m2
         echo "<settings><servers><server><id>my.anypoint.credentials</id><username>~~~Client~~~</username><password>${{ secrets.ANYPOINT_CLIENT_ID }}~?~${{ secrets.ANYPOINT_CLIENT_SECRET }}</password></server></servers></settings>" > ~/.m2/settings.xml
 
     # Set up Java and Mavenqq
