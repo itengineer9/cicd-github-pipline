@@ -19,12 +19,6 @@ jobs:
         key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
         restore-keys: |
           ${{ runner.os }}-maven-
-    
-    # Create Maven settings.xml following MuleSoft documentation format
-    - name: Set up settings.xml        
-      run: |
-        echo "<settings><servers><server><id>my.anypoint.credentials</id><username>~~~Client~~~</username><password>${{ secrets.ANYPOINT_CLIENT_ID }}~?~${{ secrets.ANYPOINT_CLIENT_SECRET }}</password></server></servers></settings>" > ~/.m2/settings.xml
-
     # Set up Java and Mavenqq
     - name: Set up JDK 1.8
       uses: actions/setup-java@v3
@@ -61,6 +55,12 @@ jobs:
     - uses: actions/download-artifact@v3
       with:
         name: artifacts
+    
+  # Create Maven settings.xml following MuleSoft documentation format
+    - name: Set up settings.xml        
+      run: |
+        echo "<settings><servers><server><id>my.anypoint.credentials</id><username>~~~Client~~~</username><password>${{ secrets.ANYPOINT_CLIENT_ID }}~?~${{ secrets.ANYPOINT_CLIENT_SECRET }}</password></server></servers></settings>" > ~/.m2/settings.xml
+     
     - name: Deploy to Sandbox
       run: |
         artifactName=$(ls *.jar | head -1)
