@@ -21,9 +21,9 @@ jobs:
           ${{ runner.os }}-maven-
     
     # Create Maven settings.xml following MuleSoft documentation format
-    - name: Set up settings.xml
+    - name: Set up settings.xml        
       run: |
-        mkdir -p /home/runner/.m2
+        path: ~/.m2
         echo "<settings><servers><server><id>my.anypoint.credentials</id><username>~~~Client~~~</username><password>${{ secrets.ANYPOINT_CLIENT_ID }}~?~${{ secrets.ANYPOINT_CLIENT_SECRET }}</password></server></servers></settings>" > ~/.m2/settings.xml
 
     # Set up Java and Mavenqq
@@ -66,4 +66,4 @@ jobs:
       run: |
         artifactName=$(ls *.jar | head -1)
         mvn deploy -DmuleDeploy \
-         -Dmule.artifact=$artifactName --settings /home/runner/.m2/settings.xml
+         -Dmule.artifact=$artifactName --settings ~/.m2/settings.xml
