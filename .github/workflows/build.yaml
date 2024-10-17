@@ -64,5 +64,5 @@ jobs:
     - name: Deploy to Sandbox
       run: |
         artifactName=$(ls *.jar | head -1)
-        mvn deploy -DmuleDeploy \
+        mvn deploy -DmuleDeploy -X \
          -Dmule.artifact=$artifactName --settings ~/.m2/settings.xml
