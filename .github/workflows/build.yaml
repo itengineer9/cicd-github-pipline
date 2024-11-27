@@ -66,9 +66,16 @@ jobs:
         cat ~/.m2/settings.xml # | sed 's/${{ secrets.ANYPOINT_CLIENT_ID }}/[CLIENT_ID]/g' | sed 's/${{ secrets.ANYPOINT_CLIENT_SECRET }}/[CLIENT_SECRET]/g'
    
     - name: Deploy to Sandbox
+<<<<<<< HEAD
         env: 
           KEY: ${{secrets.decryption_key}}
       run: |
         artifactName=$(ls *.jar | head -1)
         mvn deploy -DmuleDeploy -e -Ddecryption.key="$KEY"\
          -Dmule.artifact=$artifactName --settings ~/.m2/settings.xml
+=======
+      run: |
+        artifactName=$(ls *.jar | head -1)
+        mvn deploy -DmuleDeploy -e \
+         -Dmule.artifact=$artifactName --settings ~/.m2/settings.xml
+>>>>>>> dd7a4ba81778924714fc6e0054fc5a47673b9629

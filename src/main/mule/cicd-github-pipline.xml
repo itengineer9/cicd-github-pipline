@@ -13,7 +13,7 @@ http://www.mulesoft.org/schema/mule/db http://www.mulesoft.org/schema/mule/db/cu
 		<http:listener doc:name="Listener get /cicd" doc:id="376b4063-4ca5-47d9-8139-bc06a34af3c7" config-ref="HTTP_Listener_config" path="cicd"/>
 		<logger level="INFO" doc:name="Log mule.version" doc:id="3c59d4c5-3d54-4d42-b25b-206222ea68fc" message="#[mule.version]" category="log.getAllUsersFlow.muleVersion"/>
 		<db:select doc:name="Select all users" doc:id="309bdead-979b-4a20-93cb-03538e0acb92" config-ref="Database_Config_Aus_Properties">
-			<db:sql ><![CDATA[select * from users;]]></db:sql>
+			<db:sql ><![CDATA[select * from film;]]></db:sql>
 		</db:select>
 		<set-payload value="#[output application/json --- payload]" doc:name="Set payload" doc:id="6b37b0fc-4bd6-4623-912e-7cfd1c54e0b1" />
 		<logger level="INFO" doc:name="Log payload" doc:id="a932892a-530c-4024-ac1c-923bdc536c56" message="#[payload]" category="log.getAllUsersFlow.endPayload"/>

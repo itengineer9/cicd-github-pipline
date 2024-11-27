@@ -2,7 +2,7 @@
 #This file used to save database properties
 db:
   host: 'localhost'
-  user: 'aalhamad'
-  pass: 'Rtz6gh7j8k'
-  db: 'test_schema'
+  user: 'root'
+  pass: 'Rtz6gh7j8k9@'
+  db: 'sakila'
   port: '3306'
