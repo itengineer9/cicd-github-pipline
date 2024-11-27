@@ -10,10 +10,10 @@ http://www.mulesoft.org/schema/mule/db http://www.mulesoft.org/schema/mule/db/cu
 	</http:listener-config>
 	
 	<flow name="getAllUsersFlow" doc:id="38e71d51-e178-4cd8-8d60-3b0e1cd4aba2" >
-		<http:listener doc:name="Listener get /cics" doc:id="376b4063-4ca5-47d9-8139-bc06a34af3c7" config-ref="HTTP_Listener_config" path="cicd"/>
+		<http:listener doc:name="Listener get /cicd" doc:id="376b4063-4ca5-47d9-8139-bc06a34af3c7" config-ref="HTTP_Listener_config" path="cicd"/>
 		<logger level="INFO" doc:name="Log mule.version" doc:id="3c59d4c5-3d54-4d42-b25b-206222ea68fc" message="#[mule.version]" category="log.getAllUsersFlow.muleVersion"/>
 		<db:select doc:name="Select all users" doc:id="309bdead-979b-4a20-93cb-03538e0acb92" config-ref="Database_Config_Aus_Properties">
-			<db:sql ><![CDATA[select * from users;]]></db:sql>
+			<db:sql ><![CDATA[select * from film;]]></db:sql>
 		</db:select>
 		<set-payload value="#[output application/json --- payload]" doc:name="Set payload" doc:id="6b37b0fc-4bd6-4623-912e-7cfd1c54e0b1" />
 		<logger level="INFO" doc:name="Log payload" doc:id="a932892a-530c-4024-ac1c-923bdc536c56" message="#[payload]" category="log.getAllUsersFlow.endPayload"/>
@@ -25,9 +25,9 @@ http://www.mulesoft.org/schema/mule/db http://www.mulesoft.org/schema/mule/db/cu
 	
 </flow>
 	<flow name="testFlow" doc:id="38cb1d3b-4f9b-4b59-b269-f807511ccc20" >
-		<http:listener doc:name="Listener get /cics" doc:id="b706b7db-e473-4492-a718-66edeb2a1def" config-ref="HTTP_Listener_config" path="test" />
+		<http:listener doc:name="Listener get /cicd" doc:id="b706b7db-e473-4492-a718-66edeb2a1def" config-ref="HTTP_Listener_config" path="test" />
 		<logger level="INFO" doc:name="Log mule.version" doc:id="07e36459-baa1-40cb-a37e-c845a276a37f" message="#[output application/json --- {muleVersion: mule.version}]" category="log.getAllUsersFlow.muleVersion" />
-		<set-payload value='#[output application/json --- "it is working"]' doc:name="Set payload" doc:id="f4b332cd-2ba2-4062-9b60-09ac34aef27f" />
+		<set-payload value="#[output application/json ---{&#10;	Sataus: &quot;it is working&quot;, &#10;	Property: 'encrypted.property'&#10;}]" doc:name="Set payload" doc:id="f4b332cd-2ba2-4062-9b60-09ac34aef27f" />
 		<logger level="INFO" doc:name="Log payload" doc:id="4a975272-2c9e-4b0e-9be8-f44414e7210d" message="#[payload]" category="log.getAllUsersFlow.endPayload" />
 		<error-handler >
 			<on-error-continue enableNotifications="true" logException="true" doc:name="On Error Continue" doc:id="355906c0-8ec1-43f2-b75b-72f75ddab683" type="ANY" >

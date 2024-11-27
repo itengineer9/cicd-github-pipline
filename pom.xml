@@ -64,6 +64,7 @@
 						<vCores>1</vCores>
 						<properties>
 							<http.port>8081</http.port>
+							<secure.key>${decryption.key}</secure.key>
 						</properties>
 						<secureProperties>
 							<https.port>8082</https.port>
@@ -97,6 +98,12 @@
 			<groupId>org.mule.connectors</groupId>
 			<artifactId>mule-http-connector</artifactId>
 			<version>1.10.0</version>
+			<classifier>mule-plugin</classifier>
+		</dependency>
+		<dependency>
+			<groupId>com.mulesoft.modules</groupId>
+			<artifactId>mule-secure-configuration-property-module</artifactId>
+			<version>1.2.7</version>
 			<classifier>mule-plugin</classifier>
 		</dependency>
 	</dependencies>
