@@ -12,6 +12,7 @@ jobs:
     steps:
     - name: Checkout this repo
       uses: actions/checkout@v3
+
     - name: Cache dependencies
       uses: actions/cache@v3
       with:
@@ -19,20 +20,24 @@ jobs:
         key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
         restore-keys: |
           ${{ runner.os }}-maven-
-    # Set up Java and Mavenqq
+
+    # Set up Java and Maven
     - name: Set up JDK 1.8
       uses: actions/setup-java@v3
-      with:0
+      with:
         distribution: 'zulu'
-        java-version: 8
+        java-version: '8'
+        
     - name: Build with Maven
       run: mvn -B package --file pom.xml
+
     - name: Stamp artifact file name with commit hash
       run: |
         artifactName1=$(ls target/*.jar | head -1)
         commitHash=$(git rev-parse --short "$GITHUB_SHA")
         artifactName2=$(ls target/*.jar | head -1 | sed "s/.jar/-$commitHash.jar/g")
         mv $artifactName1 $artifactName2
+
     - name: Upload artifact 
       uses: actions/upload-artifact@v3
       with:
@@ -45,6 +50,7 @@ jobs:
     steps:    
     - name: Checkout this repo
       uses: actions/checkout@v3
+
     - name: Cache dependencies
       uses: actions/cache@v3
       with:
@@ -52,24 +58,25 @@ jobs:
         key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
         restore-keys: |
           ${{ runner.os }}-maven-
+
     - uses: actions/download-artifact@v3
       with:
         name: artifacts
     
-  # Create Maven settings.xml following MuleSoft documentation format
+    # Create Maven settings.xml following MuleSoft documentation format
     - name: Set up settings.xml        
       run: |
         echo "<settings><servers><server><id>my.anypoint.credentials</id><username>~~~Client~~~</username><password>${{ secrets.ANYPOINT_CLIENT_ID }}~?~${{ secrets.ANYPOINT_CLIENT_SECRET }}</password></server></servers></settings>" > ~/.m2/settings.xml
-   # Display the contents of the settings.xml (masking sensitive info)
+
+    # Display the contents of the settings.xml (masking sensitive info)
     - name: Display settings.xml
       run: |
         cat ~/.m2/settings.xml # | sed 's/${{ secrets.ANYPOINT_CLIENT_ID }}/[CLIENT_ID]/g' | sed 's/${{ secrets.ANYPOINT_CLIENT_SECRET }}/[CLIENT_SECRET]/g'
    
     - name: Deploy to Sandbox
       env: 
-          KEY: ${{secrets.decryption_key}}
+          KEY: ${{ secrets.decryption_key }}
       run: |
         artifactName=$(ls *.jar | head -1)
-        mvn deploy -DmuleDeploy -e -Ddecryption.key="$KEY"\
+        mvn deploy -DmuleDeploy -e -Ddecryption.key="$KEY" \
          -Dmule.artifact=$artifactName --settings ~/.m2/settings.xml
-
