@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:munit="http://www.mulesoft.org/schema/mule/munit" xmlns:munit-tools="http://www.mulesoft.org/schema/mule/munit-tools"
+	xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:doc="http://www.mulesoft.org/schema/mule/documentation"
+	xsi:schemaLocation="
+		http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+		http://www.mulesoft.org/schema/mule/munit http://www.mulesoft.org/schema/mule/munit/current/mule-munit.xsd
+		http://www.mulesoft.org/schema/mule/munit-tools  http://www.mulesoft.org/schema/mule/munit-tools/current/mule-munit-tools.xsd">
+	<munit:config name="cicd-github-pipline-suite.xml" />
+	<munit:test name="getAllUsersFlow-test" doc:id="13e44bb1-3a4b-4c73-bd3f-b962f90fbb89" >
+		<munit:behavior >
+			<munit-tools:mock-when doc:name="Mock Select all users" doc:id="09de45ff-93cb-44cc-8aaf-57d411f87763" processor="db:select">
+				<munit-tools:with-attributes >
+					<munit-tools:with-attribute whereValue="309bdead-979b-4a20-93cb-03538e0acb92" attributeName="doc:id" />
+				</munit-tools:with-attributes>
+				<munit-tools:then-return >
+					<munit-tools:payload value="#[output application/java --- readUrl('classpath://getAllUsersFlowtest\mock_payload.dwl')]" mediaType="application/java" encoding="UTF-8" />
+				</munit-tools:then-return>
+			</munit-tools:mock-when>
+			<munit:set-event doc:name="Set Input" doc:id="38f37595-e398-453b-beeb-aeeb95781f64" >
+				<munit:payload value="#[readUrl('classpath://getAllUsersFlowtest\set-event_payload.dwl')]" encoding="UTF-8" />
+				<munit:attributes value="#[readUrl('classpath://getAllUsersFlowtest\set-event_attributes.dwl')]" />
+			</munit:set-event>
+		</munit:behavior>
+		<munit:execution >
+			<flow-ref doc:name="Flow-ref to getAllUsersFlow" doc:id="8616f2eb-9d65-4d52-ab9f-c62816498466" name="getAllUsersFlow"/>
+		</munit:execution>
+		<munit:validation >
+			<munit-tools:assert doc:name="Assert payload" doc:id="2e0e6578-a83c-4a4a-8b31-c37af6d54044" message="The payload does not match">
+				<munit-tools:that ><![CDATA[#[%dw 2.0
+import getAllUsersFlowtest::assert_expression_payload
+---
+assert_expression_payload::main({payload: payload, attributes: attributes, vars: vars})]]]></munit-tools:that>
+			</munit-tools:assert>
+			<munit-tools:verify-call doc:name="Verify Set payload" doc:id="5b6fe429-1f91-4d52-9191-74f916b50aa7" processor="set-payload" times="1">
+				<munit-tools:with-attributes >
+					<munit-tools:with-attribute whereValue="6b37b0fc-4bd6-4623-912e-7cfd1c54e0b1" attributeName="doc:id" />
+				</munit-tools:with-attributes>
+			</munit-tools:verify-call>
+		</munit:validation>
+	</munit:test>
+	<munit:test name="testFlow-test" doc:id="71feeeab-18c7-45fe-ac4e-bd2dee3d2a6b" >
+		<munit:behavior >
+			<munit:set-event doc:name="Set Input" doc:id="ad9fff66-6990-4dfa-8ac0-d954e9219087" >
+				<munit:payload value="#[readUrl('classpath://testFlowtest\set-event_payload.dwl')]" encoding="UTF-8" />
+				<munit:attributes value="#[readUrl('classpath://testFlowtest\set-event_attributes.dwl')]" />
+			</munit:set-event>
+		</munit:behavior>
+		<munit:execution >
+			<flow-ref doc:name="Flow-ref to testFlow" doc:id="d152ec0c-a905-48d0-aef0-c38cb94f4a59" name="testFlow"/>
+		</munit:execution>
+		<munit:validation >
+			<munit-tools:assert doc:name="Assert payload" doc:id="519b1fe1-0eca-40b0-be83-1d947cba934f" message="The payload does not match">
+				<munit-tools:that ><![CDATA[#[%dw 2.0
+import testFlowtest::assert_expression_payload
+---
+assert_expression_payload::main({payload: payload, attributes: attributes, vars: vars})]]]></munit-tools:that>
+			</munit-tools:assert>
+			<munit-tools:verify-call doc:name="Verify Set payload" doc:id="e8cdc366-c270-45ff-b827-6be98f7a3a91" processor="set-payload" times="1">
+				<munit-tools:with-attributes >
+					<munit-tools:with-attribute whereValue="f4b332cd-2ba2-4062-9b60-09ac34aef27f" attributeName="doc:id" />
+				</munit-tools:with-attributes>
+			</munit-tools:verify-call>
+		</munit:validation>
+	</munit:test>
+	<munit:test name="getAllUsersFlow-test-Error" doc:id="df57bf21-a187-4720-b5f8-600d7f0dcfbc" expectedErrorType="DB:CONNECTIVITY">
+		<munit:behavior >
+			<munit-tools:mock-when doc:name="Mock Select all users" doc:id="01489e17-554a-43b7-8f90-483be1eaabb3" processor="db:select" >
+				<munit-tools:with-attributes >
+					<munit-tools:with-attribute whereValue="309bdead-979b-4a20-93cb-03538e0acb92" attributeName="doc:id" />
+				</munit-tools:with-attributes>
+				<munit-tools:then-return >
+					<munit-tools:error typeId="DB:CONNECTIVITY" />
+				</munit-tools:then-return>
+				
+			</munit-tools:mock-when>
+			<munit:set-event doc:name="Set Input" doc:id="7a2e9201-f9fb-4fde-a43f-2c24c1ba5df2">
+				<munit:payload value="#[readUrl('classpath://getAllUsersFlowtest\set-event_payload.dwl')]" encoding="UTF-8" mediaType="application/java" />
+			
+			</munit:set-event>
+		</munit:behavior>
+		<munit:execution >
+			<flow-ref doc:name="Flow-ref to getAllUsersFlow" doc:id="db33e7d1-0c17-49a6-94ef-d044f06262d8" name="getAllUsersFlow" />
+		</munit:execution>
+		<munit:validation>
+			<munit-tools:verify-call doc:name="Verify DB call" doc:id="f2283746-d2c8-453a-a970-be49f9a556b8" processor="db:select" times="1">
+				<munit-tools:with-attributes >
+					<munit-tools:with-attribute whereValue="309bdead-979b-4a20-93cb-03538e0acb92" attributeName="doc:id" />
+				</munit-tools:with-attributes>
+			</munit-tools:verify-call>
+		</munit:validation>
+	</munit:test>
+
+
+</mule>
