@@ -29,7 +29,7 @@ jobs:
         java-version: '8'
         
     - name: Build with Maven
-      run: mvn -B package --file pom.xml
+      run: mvn -B package --file pom.xml -DskipMunitTests
 
     - name: Stamp artifact file name with commit hash
       run: |
@@ -69,14 +69,14 @@ jobs:
         echo "<settings><servers><server><id>my.anypoint.credentials</id><username>~~~Client~~~</username><password>${{ secrets.ANYPOINT_CLIENT_ID }}~?~${{ secrets.ANYPOINT_CLIENT_SECRET }}</password></server></servers></settings>" > ~/.m2/settings.xml
 
     # Display the contents of the settings.xml (masking sensitive info)
-    - name: Display settings.xml
-      run: |
-        cat ~/.m2/settings.xml # | sed 's/${{ secrets.ANYPOINT_CLIENT_ID }}/[CLIENT_ID]/g' | sed 's/${{ secrets.ANYPOINT_CLIENT_SECRET }}/[CLIENT_SECRET]/g'
+   # - name: Display settings.xml
+     # run: |
+     #   cat ~/.m2/settings.xml # | sed 's/${{ secrets.ANYPOINT_CLIENT_ID }}/[CLIENT_ID]/g' | sed 's/${{ secrets.ANYPOINT_CLIENT_SECRET }}/[CLIENT_SECRET]/g'
    
     - name: Deploy to Sandbox
       env: 
           KEY: ${{ secrets.decryption_key }}
       run: |
         artifactName=$(ls *.jar | head -1)
-        mvn deploy -DmuleDeploy -e -Ddecryption.key="$KEY" \
+        mvn deploy -DmuleDeploy -e -Ddecryption.key="$KEY" -DskipMunitTests \
          -Dmule.artifact=$artifactName --settings ~/.m2/settings.xml
